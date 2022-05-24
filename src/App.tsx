@@ -1,26 +1,38 @@
-import React from "react";
-import logo from "./logo.svg";
+import React, { useEffect, useMemo, useState } from "react";
 import "./App.css";
+import { Result } from "components/result";
+import { Search } from "components/search";
+import { regexQQNumber } from "utils";
+import { useDebounce } from "hooks";
+import { useFetch } from "hooks/useFetch";
+import { fetchGet } from "utils/axios";
 
-function App() {
+const App = () => {
+  const [searchText, setSearchText] = useState("");
+  const searchDebounce = useDebounce(searchText, 500);
+  const searchParams = useMemo(
+    () => ({ qq: searchDebounce }),
+    [searchDebounce]
+  );
+  const { data, error, isLoading, run, setError } = useFetch();
+
+  useEffect(() => {
+    const judge = regexQQNumber(searchParams.qq);
+    if (!judge && searchParams.qq.trim() !== "")
+      setError(new Error("请输入合法数据 "));
+    if (judge) run(fetchGet("qq.info", searchParams));
+  }, [searchParams, setError, run]);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>QQ号查询</h1>
+      {error ? error.message : ""}
+      {isLoading ? 1 : 0}
+      {data ? JSON.stringify(data) : ""}
+      <Search searchText={searchText} setSearchText={setSearchText} />
+      <Result />
     </div>
   );
-}
+};
 
 export default App;
