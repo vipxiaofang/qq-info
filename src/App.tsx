@@ -19,10 +19,15 @@ const App = () => {
 
   useEffect(() => {
     const judge = regexQQNumber(searchParams.qq);
-    if (!judge && searchParams.qq.trim() === "") resetIdle();
-    if (!judge && searchParams.qq.trim() !== "")
-      setError(new Error("请输入5-12位的QQ号"));
-    if (judge) run(fetchGet("qq.info", searchParams));
+    if (judge) {
+      run(fetchGet("qq.info", searchParams));
+    } else {
+      if (searchParams.qq.trim() === "") {
+        resetIdle();
+      } else {
+        setError(new Error("请输入5-12位的QQ号"));
+      }
+    }
   }, [searchParams, resetIdle, setError, run]);
 
   return (

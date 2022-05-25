@@ -22,7 +22,11 @@ $ npm run build
 ## Directory
 
 ```shell
+...
 src
+├── __tests__
+│   ├── components.tsx
+│   └── utils.ts
 ├── components
 │   ├── result
 │   └── search
@@ -37,4 +41,5 @@ src
 ├── App.tsx
 ├── index.css
 └── index.tsx
+...
 ```
