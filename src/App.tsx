@@ -1,11 +1,11 @@
 import React, { useEffect, useMemo, useState } from "react";
 import "./App.css";
-import { Result } from "components/result";
+import { Result, Data } from "components/result";
 import { Search } from "components/search";
 import { regexQQNumber } from "utils";
+import { fetchGet } from "utils/axios";
 import { useDebounce } from "hooks";
 import { useFetch } from "hooks/useFetch";
-import { fetchGet } from "utils/axios";
 
 const App = () => {
   const [searchText, setSearchText] = useState("");
@@ -14,23 +14,22 @@ const App = () => {
     () => ({ qq: searchDebounce }),
     [searchDebounce]
   );
-  const { data, error, isLoading, run, setError } = useFetch();
+
+  const { run, setError, resetIdle, ...rest } = useFetch<Data>();
 
   useEffect(() => {
     const judge = regexQQNumber(searchParams.qq);
+    if (!judge && searchParams.qq.trim() === "") resetIdle();
     if (!judge && searchParams.qq.trim() !== "")
-      setError(new Error("请输入合法数据 "));
+      setError(new Error("请输入5-12位的QQ号"));
     if (judge) run(fetchGet("qq.info", searchParams));
-  }, [searchParams, setError, run]);
+  }, [searchParams, resetIdle, setError, run]);
 
   return (
     <div className="App">
       <h1>QQ号查询</h1>
-      {error ? error.message : ""}
-      {isLoading ? 1 : 0}
-      {data ? JSON.stringify(data) : ""}
       <Search searchText={searchText} setSearchText={setSearchText} />
-      <Result />
+      <Result {...rest} />
     </div>
   );
 };

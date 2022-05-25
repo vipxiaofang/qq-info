@@ -1,0 +1,38 @@
+.result {
+  margin-top: 20px;
+  border: 1px solid #000;
+  border-radius: 4px;
+  padding: 6px;
+  display: inline-flex;
+  align-items: center;
+  background-color: #f3f3f3;
+  min-width: 150px;
+}
+
+.result img {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+}
+
+.result .result-info {
+  margin-left: 10px;
+}
+
+.result .result-info h6 {
+  margin: 0;
+  font-size: 16px;
+}
+
+.result .result-info p:first-of-type {
+  color: #000;
+}
+
+.result .result-info p {
+  margin: 0;
+  color: #666;
+}
+
+.error {
+  color: #f00;
+}

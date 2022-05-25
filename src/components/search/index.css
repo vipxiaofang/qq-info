@@ -1,0 +1,9 @@
+.search span {
+  margin-right: 4px;
+}
+
+.search input {
+  border: none;
+  border-bottom: 1px solid #000;
+  outline: none;
+}

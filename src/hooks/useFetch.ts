@@ -50,6 +50,11 @@ export const useFetch = <D>(initialState?: State<D>) => {
     [safeDispatch]
   );
 
+  const resetIdle = useCallback(
+    () => safeDispatch(defaultInitialState),
+    [safeDispatch]
+  );
+
   const run = useCallback(
     async (promise: Promise<D>) => {
       safeDispatch({ status: "loading" });
@@ -71,6 +76,7 @@ export const useFetch = <D>(initialState?: State<D>) => {
     run,
     setData,
     setError,
+    resetIdle,
     ...state,
   };
 };
